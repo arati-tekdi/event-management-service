@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { RolePermissionService } from '../modules/permissionRbac/rolePermissionMapping/role-permission-mapping.service';
 import APIResponse from 'src/common/utils/response';
@@ -23,12 +23,16 @@ export class PermissionMiddleware implements NestMiddleware {
     );
     if (isPermissionValid) return next();
     else {
-      return APIResponse.error(
-        '',
-        'You do not have permission to access this resource',
-        'You do not have permission to access this resource',
-        'FORBIDDEN',
-      );
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(
+          APIResponse.error(
+            '',
+            'You do not have permission to access this resource',
+            'You do not have permission to access this resource',
+            'FORBIDDEN',
+          ),
+        );
     }
   }
   async checkPermissions(

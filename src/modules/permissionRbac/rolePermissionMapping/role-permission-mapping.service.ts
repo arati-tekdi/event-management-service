@@ -40,14 +40,20 @@ export class RolePermissionService {
         where: { roleTitle: roleTitle, apiPath: apiPath },
       });
       LoggerWinston.log('result: ' + result);
-      return APIResponse.success(apiId, result, HttpStatus.OK + '');
+      return response
+        .status(HttpStatus.OK)
+        .json(APIResponse.success(apiId, result, HttpStatus.OK + ''));
     } catch (error) {
-      return APIResponse.error(
-        apiId,
-        'Failed to fetch permission data.',
-        error.message,
-        'INTERNAL_SERVER_ERROR',
-      );
+      return response
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(
+          APIResponse.error(
+            apiId,
+            'Failed to fetch permission data.',
+            error.message,
+            'INTERNAL_SERVER_ERROR',
+          ),
+        );
     }
   }
 
@@ -62,15 +68,22 @@ export class RolePermissionService {
         roleTitle: permissionCreateDto.roleTitle,
         apiPath: permissionCreateDto.apiPath,
         requestType: permissionCreateDto.requestType,
+        module: permissionCreateDto.module,
       });
-      return APIResponse.success(apiId, result, HttpStatus.OK + '');
+      return response
+        .status(HttpStatus.OK)
+        .json(APIResponse.success(apiId, result, HttpStatus.OK + ''));
     } catch (error) {
-      return APIResponse.error(
-        apiId,
-        'Failed to add permission data.',
-        error.message,
-        'INTERNAL_SERVER_ERROR',
-      );
+      return response
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(
+          APIResponse.error(
+            apiId,
+            'Failed to add permission data.',
+            error.message,
+            'INTERNAL_SERVER_ERROR',
+          ),
+        );
     }
   }
 
@@ -82,21 +95,28 @@ export class RolePermissionService {
     const apiId = 'api.update.permission';
     try {
       let result = await this.rolePermissionRepository.update(
-        rolePermissionCreateDto.permissionId,
+        rolePermissionCreateDto.rolePermissionId,
         {
           roleTitle: rolePermissionCreateDto.roleTitle,
           apiPath: rolePermissionCreateDto.apiPath,
           requestType: rolePermissionCreateDto.requestType,
+          module: rolePermissionCreateDto.module,
         },
       );
-      return APIResponse.success(apiId, result, HttpStatus.OK + '');
+      return response
+        .status(HttpStatus.OK)
+        .json(APIResponse.success(apiId, result, HttpStatus.OK + ''));
     } catch (error) {
-      return APIResponse.error(
-        apiId,
-        'Failed to update permission data.',
-        error.message,
-        'INTERNAL_SERVER_ERROR',
-      );
+      return response
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(
+          APIResponse.error(
+            apiId,
+            'Failed to update permission data.',
+            error.message,
+            'INTERNAL_SERVER_ERROR',
+          ),
+        );
     }
   }
 

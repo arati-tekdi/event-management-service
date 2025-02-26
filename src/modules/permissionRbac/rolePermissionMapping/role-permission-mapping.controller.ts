@@ -21,15 +21,15 @@ export class RolePermissionMappingController {
   }
 
   //get permission
+  //get permission
   @Post('/get')
   public async getPermission(
     @Res() response: Response,
-    @Body() roleTitle: string,
-    @Body() apiPath: string,
+    @Body() reqObj: any,
   ): Promise<Response> {
     return await this.rolePermissionService.getPermission(
-      roleTitle,
-      apiPath,
+      reqObj.roleTitle,
+      reqObj.apiPath,
       response,
     );
   }

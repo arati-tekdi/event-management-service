@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,6 +23,23 @@ import { RolePermissionModule } from './modules/permissionRbac/rolePermissionMap
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(PermissionMiddleware).forRoutes('*'); // Apply middleware to the all routes
+    consumer
+      .apply(PermissionMiddleware)
+      .exclude(
+        {
+          path: 'event-service/role-permission/create',
+          method: RequestMethod.POST,
+        }, // Exclude POST /auth/login
+        {
+          path: 'event-service/role-permission/get',
+          method: RequestMethod.POST,
+        }, // Exclude POST /auth/login
+        {
+          path: 'event-service/role-permission/update',
+          method: RequestMethod.POST,
+        }, // Exclude POST /auth/login
+        // Exclude GET /health
+      )
+      .forRoutes('*'); // Apply middleware to the all routes
   }
 }
